@@ -2,6 +2,11 @@ package hexlet.code;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello world!" + TestClass.return42());
+        var v = new Validator();
+        var schema = v.string();
+        schema.required().minLength(10).contains("abc");
+        System.out.println(schema);
+        var schema2 = v.string();
+        System.out.println(schema2);
     }
 }
