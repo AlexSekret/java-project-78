@@ -9,6 +9,6 @@ class TestClassTest {
     @Test
     void return42Test() {
         var expected = "42";
-        assertEquals(expected,TestClass.return42());
+        assertEquals(expected, TestClass.return42());
     }
 }
