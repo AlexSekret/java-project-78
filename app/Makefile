@@ -21,14 +21,15 @@ report:
 lint:
 	./gradlew checkstyleMain
 
-check-deps:
-	./gradlew dependencyUpdates -Drevision=release
+lint-tests:
+	./gradlew checkstyleTest
 
 install-dist:
 	./gradlew installDist
 
 build-run: build run
 
-#do-all: clean build install-dist run-dist report
+do-all: clean build report run
 
+do-totalCheckStyle: clean lint lint-tests
 .PHONY: build
