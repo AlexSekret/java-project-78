@@ -29,6 +29,6 @@ install-dist:
 
 build-run: build run
 
-do-all: clean build install-dist run-dist report
+#do-all: clean build install-dist run-dist report
 
 .PHONY: build
