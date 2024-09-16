@@ -1,5 +1,5 @@
 run-dist:
-	make -C run-dist
+	make -C app run-dist
 
 build:
 	make -C app build
