@@ -28,7 +28,7 @@ public class StringSchema {
         return this;
     }
 
-    //с этой херней надо что-то делать
+    //с этой херней надо что-то делать. Этот метод должен быть в классе-родителе
     public boolean isValid(String text) {
         var validState = new ArrayList<>();
         if (!this.required && ((text == null) || text.isEmpty())) {

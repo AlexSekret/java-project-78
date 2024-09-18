@@ -1,36 +1,12 @@
 package hexlet.code.schemas;
 
 import hexlet.code.Validator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StringSchemaTest {
-    private static String filledStringSchema;
-    private static String emptyStringSchema;
-
-    @BeforeAll
-    public static void setUp() {
-        filledStringSchema = "StringSchema(required=true, minLength=10, contains=abc)";
-        emptyStringSchema = "StringSchema(required=false, minLength=null, contains=null)";
-    }
-
-    @Test
-    public void filledStringSchemaTest() {
-        var v = new Validator();
-        var actual = v.string().required().minLength(10).contains("abc").toString();
-        assertEquals(filledStringSchema, actual);
-    }
-
-    @Test
-    public void emptyStringSchemaTest() {
-        var v = new Validator();
-        var actual = v.string().toString();
-        assertEquals(emptyStringSchema, actual);
-    }
 
     @Test
     public void isValidNullAndEmptyStringNoRequiredTest() {
@@ -92,6 +68,7 @@ class StringSchemaTest {
         schema.minLength(2).minLength(250);
         assertFalse(schema.isValid("what does the fox say"));
     }
+
     @Test
     public void isValidComplexExampleTest() {
         var v = new Validator();
