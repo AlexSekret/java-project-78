@@ -1,30 +1,33 @@
 package hexlet.code.schemas;
 
-import hexlet.code.rules.PositiveNumberRule;
-import hexlet.code.rules.RangeRule;
-import hexlet.code.rules.RequiredRule;
+import java.util.function.Predicate;
 
-public class NumberSchema extends BaseSchema<Number> {
+public class NumberSchema extends BaseSchema {
     public NumberSchema() {
         super();
     }
 
     public NumberSchema required() {
-//        rules.add(new RequiredRule());
-        mapRules.put("RequiredRule", new RequiredRule());
+        if (!super.isRequired) {
+            super.isRequired = true;
+        }
         return this;
     }
 
     public NumberSchema positive() {
-//        rules.add(new PositiveNumberRule());
-        mapRules.put("PositiveNumberRule", new PositiveNumberRule());
+        Predicate<Object> isPositive = (value -> {
+            if (value == null) {
+                return true;
+            }
+            return (Integer) value > 0;
+        });
+        setRules("IsPositive", isPositive);
         return this;
     }
 
     public NumberSchema range(Integer start, Integer end) {
-//        rules.removeIf(v -> v.getClass().equals(RangeRule.class));
-//        rules.add(new RangeRule(start, end));
-        mapRules.put("RangeRule", new RangeRule(start, end));
+        Predicate<Object> inRange = value -> (Integer) value >= start && (Integer) value <= end;
+        setRules("InRange", inRange);
         return this;
     }
 }

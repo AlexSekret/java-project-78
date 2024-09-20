@@ -50,7 +50,7 @@ class MapSchemaTest {
         // shape позволяет описывать валидацию для значений каждого ключа объекта Map
         // Создаем набор схем для проверки каждого ключа проверяемого объекта
         // Для значения каждого ключа - своя схема
-        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        Map<String, BaseSchema> schemas = new HashMap<>();
 
         // Определяем схемы валидации для значений свойств "firstName" и "lastName"
         // Имя должно быть строкой, обязательно для заполнения
@@ -78,4 +78,36 @@ class MapSchemaTest {
         human3.put("lastName", "B");
         assertFalse(schema.isValid(human3));
     }
+
+    @Test
+    public void isValidMapVeryComplexTest3() {
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("firstName", validator.string().required());
+        schemas.put("lastName", validator.string().required().minLength(2));
+        schemas.put("CardNumber", validator.string().required().minLength(19));
+        schemas.put("Amount", validator.number().required().positive().range(1000, 5000));
+        schema.shape(schemas);
+        Map<String, Object> cardHolder = new HashMap<>();
+        cardHolder.put("firstName", "John");
+        cardHolder.put("lastName", "Smith");
+        cardHolder.put("CardNumber", "12345678901234567890");
+        cardHolder.put("Amount", 4500);
+        assertTrue(schema.isValid(cardHolder));
+    }
+    @Test
+    public void isValidMapVeryComplexTest4() {
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("firstName", validator.string().required());
+        schemas.put("lastName", validator.string().required().minLength(2));
+        schemas.put("CardNumber", validator.string().required().minLength(19));
+        schemas.put("Amount", validator.number().required().positive().range(1000, 5000));
+        schema.shape(schemas);
+        Map<String, Object> cardHolder = new HashMap<>();
+        cardHolder.put("firstName", "John");
+        cardHolder.put("lastName", "Smith");
+        cardHolder.put("CardNumber", "12345678901234567890");
+        cardHolder.put("Amount", 900);
+        assertFalse(schema.isValid(cardHolder));
+    }
+
 }

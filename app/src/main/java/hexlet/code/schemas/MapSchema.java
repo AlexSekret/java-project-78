@@ -1,36 +1,40 @@
 package hexlet.code.schemas;
 
-import hexlet.code.rules.MapSizeRule;
-import hexlet.code.rules.RequiredRule;
-
 import java.util.Map;
+import java.util.function.Predicate;
 
-public class MapSchema extends BaseSchema<Map<?, ?>> {
+public class MapSchema extends BaseSchema {
 
     public MapSchema() {
         super();
     }
 
     public MapSchema required() {
-//        rules.add(new RequiredRule());
-        mapRules.put("RequiredRule", new RequiredRule());
+        if (!super.isRequired) {
+            super.isRequired = true;
+        }
         return this;
     }
 
     public MapSchema sizeof(int min) {
-//        rules.add(new MapSizeRule(min));
-        mapRules.put("MapSizeRule", new MapSizeRule(min));
+        Predicate<Object> isSized = value -> ((Map) value).size() == min;
+        setRules("IsSized", isSized);
         return this;
     }
 
-    //is it need to implement deep copy?
-    //TODO: переосмыслить логику работы метода? Похоже нужно работать с мапами.
-    //Базовый класс должен хранить проверки в другой структуре данных? Отличной от ArrayList?
-    public MapSchema shape(Map<String, BaseSchema<String>> schemas) {
-        var keys = schemas.keySet();
-        for (var key : keys) {
-            mapRules.put(key, schemas.get(key).getRules(key));
-        }
+    public MapSchema shape(Map<String, BaseSchema> schemas) {
+        Predicate<Object> validate = ((value) -> {
+            var schemaKeys = schemas.keySet();
+            for (var key : schemaKeys) {
+                var baseSchema = schemas.get(key);
+                var data = ((Map<?, ?>) value).get(key);
+                if (!baseSchema.isValid(data)) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        setRules("Validate", validate);
         return this;
     }
 }
