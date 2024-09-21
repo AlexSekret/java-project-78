@@ -94,6 +94,7 @@ class MapSchemaTest {
 //        cardHolder.put("Amount", 4500);
         assertTrue(schema.isValid(cardHolder));
     }
+
     @Test
     public void isValidMapVeryComplexTest4() {
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
@@ -109,11 +110,12 @@ class MapSchemaTest {
 //        cardHolder.put("Amount", 900);
         assertFalse(schema.isValid(cardHolder));
     }
+
     @Test
     public void isValidNumbersMapTest() {
         Map<String, BaseSchema<Integer>> schemas = new HashMap<>();
         schemas.put("1", validator.number().required());
-        schemas.put("2", validator.number().required().range(2,4));
+        schemas.put("2", validator.number().required().range(2, 4));
         schemas.put("+3", validator.number().required().positive());
         schema.shape(schemas);
         Map<String, Object> validationMap = new HashMap<>();
