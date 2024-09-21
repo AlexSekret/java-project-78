@@ -4,23 +4,23 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class BaseSchema {
+public class BaseSchema<T> {
 
-    protected Map<String, Predicate<Object>> rules;
+    protected Map<String, Predicate<T>> rules;
     protected boolean isRequired;
 
     public BaseSchema() {
         this.isRequired = false;
         this.rules = new LinkedHashMap<>();
-        Predicate<Object> nonNull = value -> !(value == null);
+        Predicate<T> nonNull = value -> !(value == null);
         this.rules.put("NonNull", nonNull);
     }
 
-    public void setRules(String name, Predicate<Object> rule) {
+    public void setRules(String name, Predicate<T> rule) {
         this.rules.put(name, rule);
     }
 
-    public boolean isValid(Object data) {
+    public boolean isValid(T data) {
         var isNull = !rules.get("NonNull").test(data);
         if (!isRequired && isNull) {
             return true;

@@ -3,7 +3,7 @@ package hexlet.code.schemas;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class MapSchema extends BaseSchema {
+public class MapSchema extends BaseSchema<Map> {
 
     public MapSchema() {
         super();
@@ -17,18 +17,18 @@ public class MapSchema extends BaseSchema {
     }
 
     public MapSchema sizeof(int min) {
-        Predicate<Object> isSized = value -> ((Map) value).size() == min;
+        Predicate<Map> isSized = value -> value.size() == min;
         setRules("IsSized", isSized);
         return this;
     }
 
-    public MapSchema shape(Map<String, BaseSchema> schemas) {
-        Predicate<Object> validate = ((value) -> {
+    public <R> MapSchema shape(Map<String, BaseSchema<R>> schemas) {
+        Predicate<Map> validate = ((value) -> {
             var schemaKeys = schemas.keySet();
             for (var key : schemaKeys) {
                 var baseSchema = schemas.get(key);
-                var data = ((Map<?, ?>) value).get(key);
-                if (!baseSchema.isValid(data)) {
+                var data = value.get(key);
+                if (!baseSchema.isValid((R) data)) {
                     return false;
                 }
             }
