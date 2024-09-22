@@ -15,8 +15,7 @@ public class BaseSchema<T> {
     public BaseSchema() {
         this.isRequired = false;
         this.rules = new LinkedHashMap<>();
-        Predicate<T> nonNull = value -> !(value == null);
-        this.rules.put("NonNull", nonNull);
+        this.rules.put("NonNull", value -> value != null);
     }
 
     /**
@@ -32,11 +31,7 @@ public class BaseSchema<T> {
         if (!isRequired && isNull) {
             return true;
         }
-        for (var rule : rules.values()) {
-            if (!rule.test(data)) {
-                return false;
-            }
-        }
-        return true;
+        return rules.values().stream()
+                .allMatch(rule -> rule.test(data));
     }
 }

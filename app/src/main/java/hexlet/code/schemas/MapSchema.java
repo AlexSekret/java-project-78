@@ -10,30 +10,22 @@ public final class MapSchema extends BaseSchema<Map> {
     }
 
     public MapSchema required() {
-        if (!super.isRequired) {
-            super.isRequired = true;
-        }
+        super.isRequired = true;
         return this;
     }
 
     public MapSchema sizeof(int min) {
-        Predicate<Map> isSized = value -> value.size() == min;
-        setRules("IsSized", isSized);
+        setRules("IsSized", value -> value.size() == min);
         return this;
     }
 
     public <R> MapSchema shape(Map<String, BaseSchema<R>> schemas) {
-        Predicate<Map> validate = ((value) -> {
-            var schemaKeys = schemas.keySet();
-            for (var key : schemaKeys) {
-                var baseSchema = schemas.get(key);
-                var data = value.get(key);
-                if (!baseSchema.isValid((R) data)) {
-                    return false;
-                }
-            }
-            return true;
-        });
+        Predicate<Map> validate = value -> schemas.keySet().stream()
+                .allMatch(key -> {
+                    BaseSchema<R> baseSchema = schemas.get(key);
+                    Object data = value.get(key);
+                    return baseSchema.isValid((R) data);
+                });
         setRules("Validate", validate);
         return this;
     }
