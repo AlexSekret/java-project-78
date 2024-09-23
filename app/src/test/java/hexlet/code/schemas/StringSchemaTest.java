@@ -75,6 +75,6 @@ class StringSchemaTest {
     public void isValidComplexExampleTest() {
         schema.required().minLength(2).minLength(5).contains("Alex");
         assertTrue(schema.isValid("Alex is stupid"));
-        assertFalse(schema.isValid("no")); //символично получается))) Спорю сам с собой в тестах.
+        assertFalse(schema.isValid("no"));
     }
 }

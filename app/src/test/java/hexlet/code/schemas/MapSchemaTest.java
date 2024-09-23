@@ -47,22 +47,10 @@ class MapSchemaTest {
 
     @Test
     public void isValidMapVeryComplexTest2() {
-        // shape позволяет описывать валидацию для значений каждого ключа объекта Map
-        // Создаем набор схем для проверки каждого ключа проверяемого объекта
-        // Для значения каждого ключа - своя схема
         Map<String, BaseSchema<String>> schemas = new HashMap<>();
-
-        // Определяем схемы валидации для значений свойств "firstName" и "lastName"
-        // Имя должно быть строкой, обязательно для заполнения
         schemas.put("firstName", validator.string().required());
-        // Фамилия обязательна для заполнения и должна содержать не менее 2 символов
         schemas.put("lastName", validator.string().required().minLength(2));
-
-        // Настраиваем схему `MapSchema`
-        // Передаем созданный набор схем в метод shape()
         schema.shape(schemas);
-
-        // Проверяем объекты
         Map<String, String> human1 = new HashMap<>();
         human1.put("firstName", "John");
         human1.put("lastName", "Smith");
@@ -85,13 +73,11 @@ class MapSchemaTest {
         schemas.put("firstName", validator.string().required());
         schemas.put("lastName", validator.string().required().minLength(2));
         schemas.put("CardNumber", validator.string().required().minLength(19));
-//        schemas.put("Amount", validator.number().required().positive().range(1000, 5000));
         schema.shape(schemas);
         Map<String, Object> cardHolder = new HashMap<>();
         cardHolder.put("firstName", "John");
         cardHolder.put("lastName", "Smith");
         cardHolder.put("CardNumber", "12345678901234567890");
-//        cardHolder.put("Amount", 4500);
         assertTrue(schema.isValid(cardHolder));
     }
 
@@ -101,13 +87,11 @@ class MapSchemaTest {
         schemas.put("firstName", validator.string().required());
         schemas.put("lastName", validator.string().required().minLength(2));
         schemas.put("CardNumber", validator.string().required().minLength(19));
-//        schemas.put("Amount", validator.number().required().positive().range(1000, 5000));
         schema.shape(schemas);
         Map<String, Object> cardHolder = new HashMap<>();
         cardHolder.put("firstName", "John");
         cardHolder.put("lastName", "Smith");
         cardHolder.put("CardNumber", "1234567890123456789");
-//        cardHolder.put("Amount", 900);
         assertFalse(schema.isValid(cardHolder));
     }
 
